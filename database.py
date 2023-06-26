@@ -12,6 +12,20 @@ def select_user(username):
     else:
         return rows[0]
     
+def create_user(username, password):
+    try:
+        cur.execute("SELECT * FROM Users WHERE username = ?", (username,))
+        rows = cur.fetchall()
+        if len(rows) == 0:
+            cur.execute("INSERT INTO Users(username, password) VALUES (?,?)", (username, password))
+            con.commit()
+            return cur.lastrowid
+        else:
+            return "unique"
+    except:
+        return False
+
+    
 def select_logins_by_user(username):
     cur.execute("SELECT * FROM Logins JOIN Users ON User_ID = ID_User WHERE Users.username = ?", (username,))
     rows = cur.fetchall()

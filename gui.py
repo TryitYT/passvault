@@ -1,4 +1,5 @@
 import customtkinter
+import re
 import database
 
 root = customtkinter.CTk()
@@ -32,6 +33,32 @@ def check_login(username, password):
         set_main()
     else:
         print("Password wrong")
+
+def create_user(username, password, repassword):
+    if (not (username == "")):
+        if (not (password == "" or repassword == "")):
+            if (password == repassword):
+                x = re.search("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", password)
+                if (not (x == None)):
+                    feedbackCreate = database.create_user(username, password)
+                    print(feedbackCreate)
+                    if (not feedbackCreate):
+                        print("error: couldn't create user")
+                    elif (feedbackCreate == "unique"):
+                        print("User already exists")
+                    else:
+                        registerFrame.pack_forget()
+                        set_login()
+                else:
+                    print("The password needs atleast 8 letter. It must contain a small letter, a capital letter, and a number.")
+            else:
+                print("The passwords don't match")
+        else:
+            print("Please enter a password")
+    else:
+        print("Please enter a username")
+
+       
             
 def create_login(plattform, username, password, user_id):
     feedbackCreate = database.create_login(plattform, username, password, user_id)
@@ -95,7 +122,7 @@ def set_edit_login_frame(id):
 def set_login_frame(id):
     login = database.select_login(id)
     if (not login):
-        print("error: id doesnn't match with database entry")
+        print("error: id doesn't match with database entry")
     else:
         informationFrame.grid_remove()
         for child in informationFrame.winfo_children():
@@ -161,7 +188,7 @@ def set_register():
     verifyPassword = customtkinter.CTkEntry(master=registerFrame, placeholder_text="Repeat Password", show="*", width=200)
     verifyPassword.pack(pady=(5,12), padx=10)
 
-    login = customtkinter.CTkButton(master=registerFrame, text="Sign Up", command="dsf", width=200)
+    login = customtkinter.CTkButton(master=registerFrame, text="Sign Up", command=lambda : create_user(username.get(), password.get(), verifyPassword.get()), width=200)
     login.pack(pady=12,padx=10)
 
     link = customtkinter.CTkFont(family="Roboto", size=12, underline=True)
