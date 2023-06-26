@@ -13,7 +13,7 @@ def select_user(username):
         return rows[0]
     
 def select_logins_by_user(username):
-    cur.execute("SELECT * FROM Logins JOIN Users ON User_ID = ID_User WHERE username = ?", (username,))
+    cur.execute("SELECT * FROM Logins JOIN Users ON User_ID = ID_User WHERE Users.username = ?", (username,))
     rows = cur.fetchall()
     if len(rows)==0:
         return False
@@ -27,3 +27,27 @@ def select_login(id):
         return False
     else:
         return rows[0]
+    
+def create_login(plattform, username, password, user_id):
+    try:
+        cur.execute("INSERT INTO Logins(plattform, username, password, User_ID) VALUES (?,?,?,?)", (plattform, username, password, user_id))
+        con.commit()
+        return cur.lastrowid
+    except:
+        return False
+    
+def delete_login(id):
+    try:
+        cur.execute("DELETE FROM Logins WHERE ID_Login = ?", (id,))
+        con.commit()
+        return True
+    except:
+        return False
+    
+def update_login(id, plattform, username, password):
+    try:
+        cur.execute("UPDATE Logins SET plattform = ?, username = ?, password = ? WHERE ID_Login = ?", (plattform, username, password, id))
+        con.commit()
+        return True
+    except:
+        return False
