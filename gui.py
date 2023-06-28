@@ -1,5 +1,6 @@
 import customtkinter
 import re
+import os
 import database #Importiert die database Datei. Dient wie ein DAO (Data Access Object)
 
 #Einzelne Frames für die verschiedenen Komponente der App, die Global zugegrifen müssen werden
@@ -21,7 +22,7 @@ def init():
     root.geometry("700x500") #Grösse Fenster
     root.title("PassVault")
     root.resizable(False, False)
-    root.iconbitmap("logo.ico")
+    root.wm_iconbitmap(os.path.realpath(os.path.dirname(__file__))+"\logo.ico")
     set_login() #Erstellt zu begin des Programm das login Fenster
     root.mainloop()
 

@@ -1,6 +1,7 @@
 import sqlite3
+import os
 
-con = sqlite3.connect("passvault.db") #Erstellen einer Verbindung zur Datenbank. Besser gesagt dem File
+con = sqlite3.connect(os.path.realpath(os.path.dirname(__file__))+"\passvault.db") #Erstellen einer Verbindung zur Datenbank. Besser gesagt dem File
 cur = con.cursor() #Erstellt ein Cursor
 
 #Funktion für zum erhalten eines User nach einem Namen
